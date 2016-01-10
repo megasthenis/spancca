@@ -1,3 +1,4 @@
+from __future__ import print_function
 from contextlib import contextmanager
 import numpy
 import scipy.sparse.linalg
@@ -76,7 +77,7 @@ def cca(A, rank, T, u_project, v_project, verbose=True):
     # Compute the principal subspace of the input matrix A.
     # Apply truncated singular value decomposition:
     if verbose:
-        print 'Computing SVD...',
+        print('Computing SVD...', end=""),
 
     # scipy.sparse.linalg.svds supports output with number of components k at
     # most equal to rank(A)-1.
@@ -98,7 +99,7 @@ def cca(A, rank, T, u_project, v_project, verbose=True):
     V = (Vt[order]).transpose()
 
     if verbose:
-        print '[Done, (%f seconds)]' % (time.time() - t_init)
+        print('[Done, (%f seconds)]' % (time.time() - t_init))
 
     cur_obj = -float('Inf')
     cur_u = None
@@ -127,16 +128,16 @@ def cca(A, rank, T, u_project, v_project, verbose=True):
                 x.shape, numpy.count_nonzero(x), numpy.linalg.norm(x, ord=2))
             return s
 
-        print '[Summary]'
-        print 'Input: \t',
-        print 'A: %d x %d' % (A.shape[0], A.shape[1])
-        print '\tApproximation rank (r): %d' % rank
-        print '\tSing. values: s(1)=%f, s(2)=%f, ..., s(r)=%f' % (
-            tuple(S[[0, 1, rank-1]].flatten()))
-        print 'Output:\t',
-        print 'Left (u):', vec_info(u)
-        print '\tRight (v):', vec_info(v)
-        print '\tObjective (u\'Av): %f' % (u.transpose().dot(A)).dot(v)
-        print '[Total time: %d seconds.]' % (time.time() - t_init)
+        print('[Summary]')
+        print('Input: \t', end="")
+        print('A: %d x %d' % (A.shape[0], A.shape[1]))
+        print('\tApproximation rank (r): %d' % rank)
+        print('\tSing. values: s(1)=%f, s(2)=%f, ..., s(r)=%f' % (
+            tuple(S[[0, 1, rank-1]].flatten())))
+        print('Output:\t', end="")
+        print('Left (u): %s' % vec_info(u))
+        print('\tRight (v): %s' % vec_info(v))
+        print('\tObjective (u\'Av): %f' % (u.transpose().dot(A)).dot(v))
+        print('[Total time: %d seconds.]' % (time.time() - t_init))
 
     return cur_u, cur_v
